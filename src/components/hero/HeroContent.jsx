@@ -15,16 +15,16 @@ export const HeroContent = () => {
         <span>Technology • Talent • Business Solutions</span>
       </div>
 
-      {/* Main Heading with Controlled Clamp Font Size (48px - 72px), 700 Weight, -0.03em Tracking */}
-      <h1 className="text-display font-bold text-white tracking-[-0.03em] leading-[1.02]">
+      {/* Main Heading with Controlled Clamp Font Size (40px - 72px), 700 Weight, -0.035em Tracking */}
+      <h1 className="text-display font-bold text-white tracking-[-0.035em] leading-[1.02] [text-wrap:balance]">
         Technology and Talent{' '}
         <span className="blue-gradient-text block mt-1.5 sm:mt-2">
           Built Around Your Business
         </span>
       </h1>
 
-      {/* Constrained Supporting Copy (Max 600px, 400 Weight) */}
-      <p className="text-body-lg text-slate-300 font-normal leading-relaxed max-w-[600px]">
+      {/* Constrained Supporting Copy (Max 55ch, 400 Weight) */}
+      <p className="text-body-lg text-slate-300 font-normal leading-relaxed max-w-[55ch]">
         Renovia Talent helps organizations build digital solutions, find skilled professionals, and strengthen business operations through dependable technology and professional services.
       </p>
 

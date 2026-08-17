@@ -30,13 +30,13 @@ export const PageHero = ({ badge, title, subtitle, breadcrumb = 'Page' }) => {
         )}
 
         {/* Page Main Heading */}
-        <h1 className="text-[clamp(36px,4vw,60px)] font-bold text-white tracking-tight leading-[1.08]">
+        <h1 className="text-[clamp(34px,3.8vw,58px)] font-bold text-white tracking-tight leading-[1.08] [text-wrap:balance]">
           {title}
         </h1>
 
         {/* Page Subtitle Copy */}
         {subtitle && (
-          <p className="text-body-lg text-slate-300 font-normal leading-relaxed max-w-2xl mx-auto">
+          <p className="text-body-lg text-slate-300 font-normal leading-relaxed max-w-[60ch] mx-auto">
             {subtitle}
           </p>
         )}

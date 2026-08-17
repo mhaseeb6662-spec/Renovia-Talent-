@@ -17,13 +17,13 @@ export const SectionHeading = ({
       )}
       
       {title && (
-        <h2 className="text-h1 font-bold text-white tracking-[-0.025em]">
+        <h2 className="text-h1 font-bold text-white tracking-[-0.025em] [text-wrap:balance]">
           {title}
         </h2>
       )}
       
       {subtitle && (
-        <p className="text-body-lg text-slate-300 font-normal leading-relaxed">
+        <p className={`text-body-lg text-slate-300 font-normal leading-relaxed max-w-[65ch] ${centered ? 'mx-auto' : ''}`}>
           {subtitle}
         </p>
       )}

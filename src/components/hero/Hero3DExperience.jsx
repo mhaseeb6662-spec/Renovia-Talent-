@@ -36,11 +36,11 @@ export const Hero3DExperience = ({ onOpenContact }) => {
     <section
       id="hero"
       onMouseMove={handleMouseMove}
-      className="relative min-h-[90vh] lg:min-h-screen pt-28 sm:pt-36 lg:pt-40 pb-20 overflow-hidden bg-[#030712] flex items-center"
+      className="relative min-h-[90vh] lg:min-h-screen pt-28 sm:pt-36 lg:pt-40 pb-16 lg:pb-24 overflow-hidden bg-[#030712] flex items-center"
     >
       {/* Background Subtle Radial Lighting */}
       <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:36px_36px] opacity-20 pointer-events-none" />
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[900px] h-[450px] bg-gradient-to-tr from-amber-500/10 via-blue-600/10 to-transparent blur-3xl pointer-events-none rounded-full" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[900px] h-[450px] bg-gradient-to-tr from-blue-600/15 via-indigo-600/10 to-transparent blur-3xl pointer-events-none rounded-full" />
 
       <Container className="relative z-20 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">

@@ -2,45 +2,46 @@
 
 @layer base {
   body {
-    font-family: 'Manrope', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Manrope', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     color-scheme: dark;
     background-color: #05070D;
     color: #F8FAFC;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
 }
 
-/* Executive Blue + Black Technology Theme Utilities */
+/* Executive Blue + Black Technology Theme & Manrope Fluid Typography */
 @layer utilities {
   .font-sans-manrope {
-    font-family: 'Manrope', 'Inter', system-ui, sans-serif;
+    font-family: 'Manrope', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
-  /* Headings Scale */
+  /* Fluid Typography Scale (using clamp) */
   .text-display {
-    font-size: clamp(48px, 4.5vw, 72px);
+    font-size: clamp(2.5rem, 4.2vw, 4.5rem); /* 40px to 72px */
     font-weight: 700;
     line-height: 1.02;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.035em;
   }
 
   .text-h1 {
-    font-size: clamp(34px, 3.8vw, 54px);
+    font-size: clamp(2.1rem, 3.5vw, 3.5rem); /* 33.6px to 56px */
     font-weight: 700;
-    line-height: 1.10;
+    line-height: 1.08;
     letter-spacing: -0.025em;
   }
 
   .text-h2 {
-    font-size: clamp(24px, 2.5vw, 36px);
+    font-size: clamp(1.65rem, 2.4vw, 2.5rem); /* 26.4px to 40px */
     font-weight: 700;
-    line-height: 1.15;
+    line-height: 1.12;
     letter-spacing: -0.02em;
   }
 
   .text-h3 {
-    font-size: clamp(20px, 1.8vw, 24px);
+    font-size: clamp(1.25rem, 1.6vw, 1.65rem); /* 20px to 26.4px */
     font-weight: 600;
     line-height: 1.25;
     letter-spacing: normal;
@@ -48,14 +49,14 @@
 
   /* Body Text Scale */
   .text-body-lg {
-    font-size: clamp(16px, 1.2vw, 18px);
+    font-size: clamp(1rem, 0.4vw + 0.95rem, 1.125rem); /* 16px to 18px */
     font-weight: 400;
     line-height: 1.70;
     letter-spacing: normal;
   }
 
   .text-body {
-    font-size: clamp(14px, 1vw, 16px);
+    font-size: clamp(0.875rem, 0.3vw + 0.85rem, 1rem); /* 14px to 16px */
     font-weight: 400;
     line-height: 1.65;
     letter-spacing: normal;
@@ -63,7 +64,7 @@
 
   /* Eyebrows / Small Labels */
   .text-label {
-    font-size: clamp(12px, 0.9vw, 14px);
+    font-size: clamp(0.75rem, 0.2vw + 0.7rem, 0.875rem); /* 12px to 14px */
     font-weight: 600;
     line-height: 1.0;
     letter-spacing: 0.08em;
@@ -72,7 +73,7 @@
 
   /* Button Typography */
   .text-button {
-    font-size: clamp(14px, 1vw, 16px);
+    font-size: clamp(0.875rem, 0.3vw + 0.85rem, 1rem);
     font-weight: 600;
     line-height: 1.0;
     letter-spacing: normal;
@@ -80,7 +81,7 @@
 
   /* Navbar Link Typography */
   .text-nav {
-    font-size: clamp(14px, 1vw, 15px);
+    font-size: clamp(0.875rem, 0.2vw + 0.825rem, 0.9375rem);
     font-weight: 500;
     line-height: 1.0;
     letter-spacing: normal;
