@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Manrope', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    color-scheme: dark;
+    background-color: #05070D;
+    color: #F8FAFC;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Executive Blue + Black Technology Theme Utilities */
+@layer utilities {
+  .font-sans-manrope {
+    font-family: 'Manrope', 'Inter', system-ui, sans-serif;
+  }
+
+  /* Headings Scale */
+  .text-display {
+    font-size: clamp(48px, 4.5vw, 72px);
+    font-weight: 700;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+  }
+
+  .text-h1 {
+    font-size: clamp(34px, 3.8vw, 54px);
+    font-weight: 700;
+    line-height: 1.10;
+    letter-spacing: -0.025em;
+  }
+
+  .text-h2 {
+    font-size: clamp(24px, 2.5vw, 36px);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .text-h3 {
+    font-size: clamp(20px, 1.8vw, 24px);
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: normal;
+  }
+
+  /* Body Text Scale */
+  .text-body-lg {
+    font-size: clamp(16px, 1.2vw, 18px);
+    font-weight: 400;
+    line-height: 1.70;
+    letter-spacing: normal;
+  }
+
+  .text-body {
+    font-size: clamp(14px, 1vw, 16px);
+    font-weight: 400;
+    line-height: 1.65;
+    letter-spacing: normal;
+  }
+
+  /* Eyebrows / Small Labels */
+  .text-label {
+    font-size: clamp(12px, 0.9vw, 14px);
+    font-weight: 600;
+    line-height: 1.0;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Button Typography */
+  .text-button {
+    font-size: clamp(14px, 1vw, 16px);
+    font-weight: 600;
+    line-height: 1.0;
+    letter-spacing: normal;
+  }
+
+  /* Navbar Link Typography */
+  .text-nav {
+    font-size: clamp(14px, 1vw, 15px);
+    font-weight: 500;
+    line-height: 1.0;
+    letter-spacing: normal;
+  }
+
+  /* Executive Surface & Glass Cards */
+  .glass-card {
+    background: linear-gradient(135deg, rgba(16, 22, 33, 0.85) 0%, rgba(8, 11, 18, 0.90) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+  }
+
+  .glass-card-hover {
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .glass-card-hover:hover {
+    background: linear-gradient(135deg, rgba(21, 29, 43, 0.95) 0%, rgba(12, 17, 27, 0.95) 100%);
+    border-color: rgba(59, 130, 246, 0.35);
+    box-shadow: 0 20px 40px -15px rgba(37, 99, 235, 0.20), 0 0 30px 0 rgba(37, 99, 235, 0.15);
+    transform: translateY(-4px) scale(1.01);
+  }
+
+  /* Executive Metallic Blue Gradient Text */
+  .gold-gradient-text,
+  .blue-gradient-text {
+    background: linear-gradient(135deg, #FFFFFF 0%, #93C5FD 40%, #3B82F6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #05070D;
+}
+::-webkit-scrollbar-thumb {
+  background: #151D2B;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2563EB;
+}
+
+/* Keyframes for Gentle Motion */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1deg); }
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.06); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 8s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer-btn {
+  background: linear-gradient(90deg, #2563EB 0%, #3B82F6 30%, #60A5FA 50%, #3B82F6 70%, #2563EB 100%);
+  background-size: 200% 100%;
+  animation: shimmer 4s infinite linear;
+}
