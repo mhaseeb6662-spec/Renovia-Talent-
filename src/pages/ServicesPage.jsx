@@ -1,6 +1,8 @@
 import React from 'react';
 import PageHero from '../components/common/PageHero';
 import TechTalentEcosystemSection from '../components/TechTalentEcosystemSection';
+import ServiceProcessSection from '../components/services/ServiceProcessSection';
+import TechStackSection from '../components/services/TechStackSection';
 
 export const ServicesPage = () => {
   return (
@@ -12,6 +14,8 @@ export const ServicesPage = () => {
         breadcrumb="Services"
       />
       <TechTalentEcosystemSection />
+      <ServiceProcessSection />
+      <TechStackSection />
     </main>
   );
 };
