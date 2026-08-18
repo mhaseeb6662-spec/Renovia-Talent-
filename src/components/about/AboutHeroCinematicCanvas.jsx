@@ -47,13 +47,13 @@ export const AboutHeroCinematicCanvas = () => {
     window.addEventListener('resize', resize);
 
     // Particle & node network setup
-    const nodeCount = 45;
+    const nodeCount = 50;
     const nodes = Array.from({ length: nodeCount }, (_, i) => ({
-      x: (Math.random() * 0.6 + 0.35) * canvas.width, // Positioned primarily on right side
+      x: (Math.random() * 0.65 + 0.3) * canvas.width,
       y: Math.random() * canvas.height,
-      radius: Math.random() * 2.5 + 1,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
+      radius: Math.random() * 2.8 + 1.2,
+      vx: (Math.random() - 0.5) * 0.45,
+      vy: (Math.random() - 0.5) * 0.45,
       pulse: Math.random() * Math.PI * 2,
     }));
 
@@ -63,28 +63,28 @@ export const AboutHeroCinematicCanvas = () => {
       time += 0.015;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Draw background ambient dark gradients
+      // Draw background ambient blue radial lighting (+20% brightness)
       const grad = ctx.createRadialGradient(
         canvas.width * 0.7,
         canvas.height * 0.4,
         50,
         canvas.width * 0.7,
         canvas.height * 0.4,
-        canvas.width * 0.5
+        canvas.width * 0.55
       );
-      grad.addColorStop(0, 'rgba(37, 99, 235, 0.15)');
-      grad.addColorStop(0.5, 'rgba(13, 22, 43, 0.08)');
+      grad.addColorStop(0, 'rgba(37, 99, 235, 0.22)');
+      grad.addColorStop(0.5, 'rgba(13, 22, 43, 0.12)');
       grad.addColorStop(1, 'transparent');
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Draw node connections & pulse lines (Scene dependent accents)
+      // Draw node connections & pulse lines
       for (let i = 0; i < nodeCount; i++) {
         const nodeA = nodes[i];
         nodeA.x += nodeA.vx;
         nodeA.y += nodeA.vy;
 
-        if (nodeA.x < canvas.width * 0.3) nodeA.vx *= -1;
+        if (nodeA.x < canvas.width * 0.25) nodeA.vx *= -1;
         if (nodeA.x > canvas.width * 0.95) nodeA.vx *= -1;
         if (nodeA.y < 0) nodeA.vy *= -1;
         if (nodeA.y > canvas.height) nodeA.vy *= -1;
@@ -96,11 +96,11 @@ export const AboutHeroCinematicCanvas = () => {
           const dy = nodeB.y - nodeA.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < 140) {
+          if (dist < 150) {
             ctx.beginPath();
             ctx.moveTo(nodeA.x, nodeA.y);
             ctx.lineTo(nodeB.x, nodeB.y);
-            ctx.strokeStyle = `rgba(59, 130, 246, ${0.25 * (1 - dist / 140)})`;
+            ctx.strokeStyle = `rgba(59, 130, 246, ${0.32 * (1 - dist / 150)})`;
             ctx.lineWidth = 1;
             ctx.stroke();
           }
@@ -113,7 +113,7 @@ export const AboutHeroCinematicCanvas = () => {
         ctx.arc(nodeA.x, nodeA.y, currentRadius, 0, Math.PI * 2);
         ctx.fillStyle = '#60A5FA';
         ctx.shadowColor = '#3B82F6';
-        ctx.shadowBlur = 8;
+        ctx.shadowBlur = 10;
         ctx.fill();
         ctx.shadowBlur = 0;
       }
@@ -134,11 +134,11 @@ export const AboutHeroCinematicCanvas = () => {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none select-none">
       
-      {/* 1. Cinematic Background Image Layer */}
+      {/* 1. Cinematic Background Image Layer (+20% Visibility Boost) */}
       <img
         src="/about-hero-cinematic-bg.jpg"
         alt="About Hero Cinematic Background"
-        className="absolute inset-0 w-full h-full object-cover opacity-35 scale-105 transition-transform duration-1000"
+        className="absolute inset-0 w-full h-full object-cover opacity-55 scale-105 transition-transform duration-1000"
       />
 
       {/* 2. Optional Video Element (if /about-hero-bg.mp4 is provided) */}
@@ -150,16 +150,16 @@ export const AboutHeroCinematicCanvas = () => {
           muted
           playsInline
           src="/about-hero-bg.mp4"
-          className="absolute inset-0 w-full h-full object-cover opacity-40"
+          className="absolute inset-0 w-full h-full object-cover opacity-60"
         />
       )}
 
       {/* 3. Dynamic HTML5 3D Canvas Journey Overlay */}
       {!hasVideo && <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />}
 
-      {/* 4. Left/Center Text Safety Vignette Overlay (Guarantees 100% Text Readability) */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#05070D] via-[#05070D]/85 to-transparent z-10" />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#05070D] via-transparent to-[#05070D]/80 z-10" />
+      {/* 4. Refined Text Safety Vignette Overlay (Slightly Reduced Overlay Opacity for +15-20% Video/Visual Visibility) */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#05070D] via-[#05070D]/75 to-transparent z-10" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#05070D] via-transparent to-[#05070D]/70 z-10" />
 
       {/* 5. Live Scene Progression Badge (Right Side) */}
       <div className="absolute bottom-6 right-6 sm:bottom-8 sm:right-8 z-20 hidden md:flex items-center gap-3 px-4 py-2 rounded-2xl bg-[#080B12]/90 border border-blue-500/30 backdrop-blur-xl shadow-2xl animate-in fade-in duration-500">
