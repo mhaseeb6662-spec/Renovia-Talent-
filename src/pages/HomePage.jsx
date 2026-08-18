@@ -4,6 +4,7 @@ import CapabilityStrip from '../components/CapabilityStrip';
 import AboutSection from '../components/AboutSection';
 import ServicesSection from '../components/ServicesSection';
 import WhyChooseUs from '../components/WhyChooseUs';
+import FinalCTA from '../components/FinalCTA';
 
 export const HomePage = ({ onSelectService }) => {
   return (
@@ -13,6 +14,7 @@ export const HomePage = ({ onSelectService }) => {
       <AboutSection />
       <ServicesSection onSelectService={onSelectService} />
       <WhyChooseUs />
+      <FinalCTA />
     </main>
   );
 };
