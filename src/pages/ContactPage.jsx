@@ -4,7 +4,6 @@ import confetti from 'canvas-confetti';
 import PageHero from '../components/common/PageHero';
 import Container from '../components/common/Container';
 import Button from '../components/common/Button';
-import FinalCTA from '../components/FinalCTA';
 
 export const ContactPage = () => {
   const [inquiryType, setInquiryType] = useState('technology');
@@ -240,7 +239,6 @@ export const ContactPage = () => {
         </Container>
       </section>
 
-      <FinalCTA />
     </main>
   );
 };

@@ -2,7 +2,6 @@ import React from 'react';
 import PageHero from '../components/common/PageHero';
 import ValuesSection from '../components/ValuesSection';
 import VisionMission from '../components/VisionMission';
-import FinalCTA from '../components/FinalCTA';
 
 export const ValuesPage = () => {
   return (
@@ -15,7 +14,6 @@ export const ValuesPage = () => {
       />
       <ValuesSection />
       <VisionMission />
-      <FinalCTA />
     </main>
   );
 };
