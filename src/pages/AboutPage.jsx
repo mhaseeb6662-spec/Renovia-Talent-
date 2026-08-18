@@ -2,6 +2,7 @@ import React from 'react';
 import PageHero from '../components/common/PageHero';
 import VisionMission from '../components/VisionMission';
 import CommitmentSection from '../components/CommitmentSection';
+import AboutFAQSection from '../components/about/AboutFAQSection';
 
 export const AboutPage = () => {
   return (
@@ -14,6 +15,7 @@ export const AboutPage = () => {
       />
       <VisionMission />
       <CommitmentSection />
+      <AboutFAQSection />
     </main>
   );
 };
