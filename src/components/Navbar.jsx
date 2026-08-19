@@ -44,7 +44,7 @@ export const Navbar = ({ onOpenContact }) => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'bg-[#05070D]/90 backdrop-blur-xl border-b border-slate-800/80 shadow-2xl shadow-black/60 py-3'
+          ? 'bg-[#05070D]/90 backdrop-blur-xl py-3'
           : 'bg-transparent py-5'
       }`}
     >
