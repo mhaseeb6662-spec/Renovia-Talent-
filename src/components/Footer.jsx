@@ -61,6 +61,21 @@ export const Footer = ({ onOpenLegal }) => {
                 </Link>
               </li>
               <li>
+                <Link to="/solutions" className="hover:text-blue-300 transition-colors">
+                  Solutions
+                </Link>
+              </li>
+              <li>
+                <Link to="/blog" className="hover:text-blue-300 transition-colors">
+                  Blog & Insights
+                </Link>
+              </li>
+              <li>
+                <Link to="/careers" className="hover:text-blue-300 transition-colors">
+                  Careers
+                </Link>
+              </li>
+              <li>
                 <Link to="/contact" className="hover:text-blue-300 transition-colors">
                   Contact & Inquiries
                 </Link>

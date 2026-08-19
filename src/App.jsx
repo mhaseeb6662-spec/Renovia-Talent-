@@ -11,6 +11,10 @@ import LegalModal from './components/LegalModal';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ServicesPage from './pages/ServicesPage';
+import SolutionsPage from './pages/SolutionsPage';
+import CareersPage from './pages/CareersPage';
+import BlogPage from './pages/BlogPage';
+import BlogPostPage from './pages/BlogPostPage';
 import ContactPage from './pages/ContactPage';
 import NotFoundPage from './pages/NotFoundPage';
 
@@ -23,6 +27,9 @@ const RouteMetadata = () => {
       '/': 'Renovia Talent | Technology, Talent & Business Solutions',
       '/about': 'About Renovia Talent | Technology & Professional Services',
       '/services': 'Technology, Recruitment & Business Services | Renovia Talent',
+      '/solutions': 'Technology & Talent Solutions | Renovia Talent',
+      '/careers': 'Careers at Renovia Talent | Join Our Team',
+      '/blog': 'Blog & Insights | Renovia Talent',
       '/contact': 'Contact & Consultation | Renovia Talent',
     };
 
@@ -63,6 +70,10 @@ export const AppContent = () => {
           <Route path="/" element={<HomePage onSelectService={handleSelectService} />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/services" element={<ServicesPage onSelectService={handleSelectService} />} />
+          <Route path="/solutions" element={<SolutionsPage />} />
+          <Route path="/careers" element={<CareersPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:slug" element={<BlogPostPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
