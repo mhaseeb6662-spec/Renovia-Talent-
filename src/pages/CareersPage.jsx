@@ -12,43 +12,51 @@ const perks = [
   { icon: Zap, title: 'Growth Opportunities', desc: 'Continuous learning budgets and clear promotion paths.' },
 ];
 
+import VideoBackground from '../components/common/VideoBackground';
+
 export const CareersPage = () => {
   const navigate = useNavigate();
 
   return (
     <main className="min-h-screen pb-20 bg-[#05070D]">
-      <PageHero
-        badge="Join Our Team"
-        title="Build the Future of Technology"
-        subtitle="We're looking for passionate engineers, designers, and innovators to join us in delivering world-class solutions to global clients."
-        breadcrumb="Careers"
-      />
+      <VideoBackground 
+        videoSrc="https://cdn.coverr.co/videos/coverr-network-connections-5415/1080p.mp4"
+        posterSrc="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=2000"
+      >
+        <PageHero
+          badge="Join Our Team"
+          title="Build the Future of Technology"
+          subtitle="We're looking for passionate engineers, designers, and innovators to join us in delivering world-class solutions to global clients."
+          breadcrumb="Careers"
+          transparent={true}
+        />
 
-      {/* Culture & Perks Section */}
-      <section className="py-24 border-b border-slate-800/80">
-        <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
-            <div>
-              <h2 className="text-h2 font-bold text-white mb-6">Why Work With Us?</h2>
-              <p className="text-slate-400 text-lg mb-6 leading-relaxed">
-                At Renovia Talent, we believe in empowering our people. We cultivate a culture of autonomy, continuous learning, and mutual respect. Whether you are building complex backend architectures or designing intuitive user interfaces, your work here makes a direct impact.
-              </p>
+        {/* Culture & Perks Section */}
+        <section className="py-24">
+          <Container>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
+              <div className="p-8 rounded-3xl bg-[#05070D]/40 backdrop-blur-md border border-slate-800/50">
+                <h2 className="text-h2 font-bold text-white mb-6">Why Work With Us?</h2>
+                <p className="text-slate-300 text-lg mb-6 leading-relaxed">
+                  At Renovia Talent, we believe in empowering our people. We cultivate a culture of autonomy, continuous learning, and mutual respect. Whether you are building complex backend architectures or designing intuitive user interfaces, your work here makes a direct impact.
+                </p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {perks.map((perk, i) => {
+                  const Icon = perk.icon;
+                  return (
+                    <div key={i} className="p-6 rounded-2xl bg-[#080B14]/60 backdrop-blur-md border border-slate-800/50">
+                      <Icon className="w-8 h-8 text-blue-400 mb-4" />
+                      <h3 className="text-white font-bold mb-2">{perk.title}</h3>
+                      <p className="text-sm text-slate-300">{perk.desc}</p>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {perks.map((perk, i) => {
-                const Icon = perk.icon;
-                return (
-                  <div key={i} className="p-6 rounded-2xl bg-[#080B14] border border-slate-800/50">
-                    <Icon className="w-8 h-8 text-blue-400 mb-4" />
-                    <h3 className="text-white font-bold mb-2">{perk.title}</h3>
-                    <p className="text-sm text-slate-400">{perk.desc}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </Container>
-      </section>
+          </Container>
+        </section>
+      </VideoBackground>
 
       {/* Open Positions Section */}
       <section className="py-24">

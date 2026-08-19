@@ -5,6 +5,8 @@ import PageHero from '../components/common/PageHero';
 import Container from '../components/common/Container';
 import Button from '../components/common/Button';
 
+import VideoBackground from '../components/common/VideoBackground';
+
 export const ContactPage = () => {
   const [inquiryType, setInquiryType] = useState('technology');
   const [submitted, setSubmitted] = useState(false);
@@ -32,15 +34,20 @@ export const ContactPage = () => {
 
   return (
     <main className="min-h-screen bg-[#05070D]">
-      <PageHero
-        badge="Contact & Consultation"
-        title="Let's Discuss Your Requirement"
-        subtitle="Tell us what your business needs. Renovia Talent can help you explore the right technology development, staffing placement, or business support solution."
-        breadcrumb="Contact"
-      />
+      <VideoBackground 
+        videoSrc="https://cdn.coverr.co/videos/coverr-plexus-and-connected-lines-5374/1080p.mp4"
+        posterSrc="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2000"
+      >
+        <PageHero
+          badge="Contact & Consultation"
+          title="Let's Discuss Your Requirement"
+          subtitle="Tell us what your business needs. Renovia Talent can help you explore the right technology development, staffing placement, or business support solution."
+          breadcrumb="Contact"
+          transparent={true}
+        />
 
-      <section className="py-20 sm:py-28 bg-[#05070D]">
-        <Container>
+        <section className="py-20 sm:py-28">
+          <Container>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             
             {/* Left: Contact Info & Value Commitments (5 cols) */}
@@ -94,7 +101,7 @@ export const ContactPage = () => {
 
             {/* Right: Interactive Contact Form (7 cols) */}
             <div className="lg:col-span-7">
-              <div className="p-8 sm:p-10 rounded-3xl glass-card border border-slate-800 shadow-2xl">
+              <div className="p-8 sm:p-10 rounded-3xl bg-[#080B14]/70 backdrop-blur-xl border border-slate-800/50 shadow-2xl relative z-10">
                 {submitted ? (
                   <div className="py-16 text-center space-y-6">
                     <div className="w-20 h-20 mx-auto rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center text-emerald-400 shadow-xl shadow-emerald-500/20 animate-bounce">
@@ -238,6 +245,7 @@ export const ContactPage = () => {
           </div>
         </Container>
       </section>
+      </VideoBackground>
 
     </main>
   );

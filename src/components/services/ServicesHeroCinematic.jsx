@@ -11,8 +11,6 @@ export const ServicesHeroCinematic = () => {
   const navigate = useNavigate();
   const [activeService, setActiveService] = useState(0);
   const [isGestureAnimating, setIsGestureAnimating] = useState(false);
-  const [hasVideo, setHasVideo] = useState(false);
-  const videoRef = useRef(null);
 
   const servicesList = [
     {
@@ -97,13 +95,7 @@ export const ServicesHeroCinematic = () => {
     },
   ];
 
-  // Check if an MP4 video exists in /public/services-hero-bg.mp4
-  useEffect(() => {
-    const video = document.createElement('video');
-    video.src = '/services-hero-bg.mp4';
-    video.oncanplay = () => setHasVideo(true);
-    video.onerror = () => setHasVideo(false);
-  }, []);
+  // Removed internal video logic to use global VideoBackground wrapper
 
   // Automatic 2.2-second continuous service gesture cycle (22s total loop)
   useEffect(() => {
@@ -123,27 +115,14 @@ export const ServicesHeroCinematic = () => {
   const ActiveIcon = current.icon;
 
   return (
-    <section className="relative min-h-[85vh] lg:min-h-screen pt-32 sm:pt-36 lg:pt-40 pb-20 sm:pb-24 overflow-hidden bg-[#05070D] flex items-center border-b border-slate-800/80">
+    <section className="relative min-h-[85vh] lg:min-h-screen pt-32 sm:pt-36 lg:pt-40 pb-20 sm:pb-24 overflow-hidden flex items-center border-none">
       
-      {/* 1. Cinematic Background Image Layer */}
+      {/* 1. Cinematic Background Image Layer (kept as fallback overlay if needed, but lowered opacity) */}
       <img
         src="/services-hero-cinematic-person.jpg"
         alt="Services Hero Cinematic Executive"
-        className="absolute inset-0 w-full h-full object-cover opacity-45 scale-105 transition-transform duration-1000"
+        className="absolute inset-0 w-full h-full object-cover opacity-20 scale-105 transition-transform duration-1000 mix-blend-overlay"
       />
-
-      {/* 2. Optional MP4 Video Layer */}
-      {hasVideo && (
-        <video
-          ref={videoRef}
-          autoPlay
-          loop
-          muted
-          playsInline
-          src="/services-hero-bg.mp4"
-          className="absolute inset-0 w-full h-full object-cover opacity-50"
-        />
-      )}
 
       {/* 3. Left/Center Text Safety Vignette Overlay (Guarantees 100% Readability) */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#05070D] via-[#05070D]/85 to-transparent z-10" />

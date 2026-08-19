@@ -3,7 +3,7 @@ import { Cpu, Users, Globe, Code2, Smartphone, ShieldAlert, UserPlus, Headphones
 import Container from './common/Container';
 import SectionHeading from './common/SectionHeading';
 
-export const TechTalentEcosystemSection = () => {
+export const TechTalentEcosystemSection = ({ transparent = false }) => {
   const techPillars = [
     { label: 'Website Development', icon: Globe },
     { label: 'Software Development', icon: Code2 },
@@ -21,7 +21,7 @@ export const TechTalentEcosystemSection = () => {
   ];
 
   return (
-    <section className="relative py-24 sm:py-32 bg-[#05070D] overflow-hidden border-t border-slate-800/80">
+    <section className={`relative py-24 sm:py-32 overflow-hidden ${transparent ? '' : 'bg-[#05070D] border-t border-slate-800/80'}`}>
       {/* Ambient Lighting Orbs */}
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />

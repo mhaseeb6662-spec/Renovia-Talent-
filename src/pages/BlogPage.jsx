@@ -6,6 +6,8 @@ import Container from '../components/common/Container';
 import Button from '../components/common/Button';
 import { blogData, categories } from '../data/blogData';
 
+import VideoBackground from '../components/common/VideoBackground';
+
 export const BlogPage = () => {
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState('All');
@@ -21,12 +23,18 @@ export const BlogPage = () => {
 
   return (
     <main className="min-h-screen pb-20 bg-[#05070D]">
-      <PageHero
-        badge="Insights & News"
-        title="Our Latest Thinking"
-        subtitle="Explore our perspectives on software development, artificial intelligence, tech recruitment, and the future of work."
-        breadcrumb="Blog"
-      />
+      <VideoBackground 
+        videoSrc="https://cdn.coverr.co/videos/coverr-data-stream-background-5606/1080p.mp4"
+        posterSrc="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=2000"
+      >
+        <PageHero
+          badge="Insights & News"
+          title="Our Latest Thinking"
+          subtitle="Explore our perspectives on software development, artificial intelligence, tech recruitment, and the future of work."
+          breadcrumb="Blog"
+          transparent={true}
+        />
+      </VideoBackground>
 
       {/* Categories Filter */}
       <section className="py-8 border-b border-slate-800/80 sticky top-16 sm:top-20 z-40 bg-[#05070D]/90 backdrop-blur-md">

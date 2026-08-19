@@ -4,21 +4,21 @@ import { ChevronRight, Sparkles } from 'lucide-react';
 import Container from './Container';
 import AboutHeroCinematicCanvas from '../about/AboutHeroCinematicCanvas';
 
-export const PageHero = ({ badge, title, subtitle, breadcrumb = 'Page', cinematic = false }) => {
+export const PageHero = ({ badge, title, subtitle, breadcrumb = 'Page', cinematic = false, transparent = false }) => {
   const isAboutHero = breadcrumb === 'About Us' || cinematic;
 
   return (
-    <section className="relative pt-32 sm:pt-36 lg:pt-40 pb-20 sm:pb-24 overflow-hidden bg-gradient-to-b from-[#05070D] via-[#0D162B] to-[#05070D] border-b border-slate-800/80">
+    <section className={`relative pt-32 sm:pt-36 lg:pt-40 pb-20 sm:pb-24 overflow-hidden ${transparent ? 'border-none' : 'bg-gradient-to-b from-[#05070D] via-[#0D162B] to-[#05070D] border-b border-slate-800/80'}`}>
       
       {/* Premium Cinematic Background Layer for About Page Hero */}
-      {isAboutHero ? (
+      {isAboutHero && !transparent ? (
         <AboutHeroCinematicCanvas />
-      ) : (
+      ) : !transparent ? (
         <>
           <div className="absolute inset-0 bg-[radial-gradient(#2563eb_1px,transparent_1px)] [background-size:36px_36px] opacity-15 pointer-events-none" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[350px] bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
         </>
-      )}
+      ) : null}
 
       <Container className="relative z-20 text-center max-w-4xl mx-auto space-y-5">
         
