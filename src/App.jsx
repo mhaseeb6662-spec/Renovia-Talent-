@@ -7,6 +7,7 @@ import CustomCursor from './components/common/CustomCursor';
 import ContactModal from './components/ContactModal';
 import ServiceDetailModal from './components/ServiceDetailModal';
 import LegalModal from './components/LegalModal';
+import WhatsAppFloatingButton from './components/common/WhatsAppFloatingButton';
 
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
@@ -80,6 +81,9 @@ export const AppContent = () => {
 
         {/* Global Footer */}
         <Footer onOpenLegal={handleOpenLegal} />
+
+        {/* Global WhatsApp Floating Button */}
+        <WhatsAppFloatingButton />
 
         {/* Modals */}
         <ContactModal isOpen={contactModalOpen} onClose={handleCloseContact} />
