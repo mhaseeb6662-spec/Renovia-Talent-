@@ -34,8 +34,6 @@ export const Navbar = ({ onOpenContact }) => {
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
     { name: 'Services', path: '/services' },
-    { name: 'Why Renovia', path: '/why-renovia' },
-    { name: 'Values', path: '/values' },
     { name: 'Contact', path: '/contact' },
   ];
 

@@ -61,16 +61,6 @@ export const Footer = ({ onOpenLegal }) => {
                 </Link>
               </li>
               <li>
-                <Link to="/why-renovia" className="hover:text-blue-300 transition-colors">
-                  Why Renovia
-                </Link>
-              </li>
-              <li>
-                <Link to="/values" className="hover:text-blue-300 transition-colors">
-                  Our Values
-                </Link>
-              </li>
-              <li>
                 <Link to="/contact" className="hover:text-blue-300 transition-colors">
                   Contact & Inquiries
                 </Link>

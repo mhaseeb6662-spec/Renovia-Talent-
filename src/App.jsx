@@ -11,8 +11,6 @@ import LegalModal from './components/LegalModal';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ServicesPage from './pages/ServicesPage';
-import WhyRenoviaPage from './pages/WhyRenoviaPage';
-import ValuesPage from './pages/ValuesPage';
 import ContactPage from './pages/ContactPage';
 import NotFoundPage from './pages/NotFoundPage';
 
@@ -25,8 +23,6 @@ const RouteMetadata = () => {
       '/': 'Renovia Talent | Technology, Talent & Business Solutions',
       '/about': 'About Renovia Talent | Technology & Professional Services',
       '/services': 'Technology, Recruitment & Business Services | Renovia Talent',
-      '/why-renovia': 'Why Renovia Talent | Practical Technology & Talent Partner',
-      '/values': 'Our Values & Principles | Renovia Talent',
       '/contact': 'Contact & Consultation | Renovia Talent',
     };
 
@@ -67,8 +63,6 @@ export const AppContent = () => {
           <Route path="/" element={<HomePage onSelectService={handleSelectService} />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/services" element={<ServicesPage onSelectService={handleSelectService} />} />
-          <Route path="/why-renovia" element={<WhyRenoviaPage />} />
-          <Route path="/values" element={<ValuesPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
