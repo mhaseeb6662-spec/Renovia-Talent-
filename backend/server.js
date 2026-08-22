@@ -1,5 +1,10 @@
 import dns from 'dns';
-dns.setServers(['8.8.8.8', '1.1.1.1']);
+try {
+  // Use custom public DNS on Windows development to resolve SRV records
+  if (process.platform === 'win32') {
+    dns.setServers(['8.8.8.8', '1.1.1.1']);
+  }
+} catch (e) {}
 
 import express from 'express';
 import mongoose from 'mongoose';
@@ -42,15 +47,15 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGO_URI, {
-      serverSelectionTimeoutMS: 8000,
-      family: 4, // Use IPv4, skip trying IPv6
+      serverSelectionTimeoutMS: 20000,
     });
     console.log(`✅ MongoDB Connected Successfully: ${conn.connection.host}`);
     // Auto-seed default admin & data
     await seedDatabase();
   } catch (err) {
     console.warn('⚠️ MongoDB Initial Connection Warning:', err.message);
-    console.log('ℹ️ Server will continue running and retry connection in background.');
+    console.log('ℹ️ Retrying MongoDB connection in 5 seconds...');
+    setTimeout(connectDB, 5000);
   }
 };
 
