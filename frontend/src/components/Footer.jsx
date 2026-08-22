@@ -1,10 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowUpRight, Globe } from 'lucide-react';
+import { ArrowUpRight, Globe, Send, CheckCircle2, Sparkles } from 'lucide-react';
 import Container from './common/Container';
+import { subscribeNewsletter } from '../services/api';
 
 export const Footer = ({ onOpenLegal }) => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
+  const [subscribing, setSubscribing] = useState(false);
+
+  const [error, setError] = useState(null);
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!email || !email.includes('@')) return;
+    setSubscribing(true);
+    setError(null);
+    try {
+      const res = await subscribeNewsletter(email);
+      if (res && res.success) {
+        setSubscribed(true);
+        setEmail('');
+      } else {
+        setError(res?.message || 'Subscription failed. Please try again.');
+      }
+    } catch (err) {
+      console.error('Newsletter error:', err);
+      setError(err.message || 'Unable to subscribe at this moment.');
+    } finally {
+      setSubscribing(false);
+    }
+  };
 
   return (
     <footer className="relative bg-[#030509] text-slate-400 border-t border-slate-800/80 pt-16 pb-12 overflow-hidden">
@@ -38,6 +65,38 @@ export const Footer = ({ onOpenLegal }) => {
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#101621] border border-slate-800 text-xs text-slate-300 font-medium">
               <Globe className="w-3.5 h-3.5 text-blue-400" />
               <span>Global Client & Talent Delivery Model</span>
+            </div>
+
+            {/* Newsletter Subscription */}
+            <div className="pt-2">
+              <p className="text-xs font-semibold text-white uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+                Subscribe to Tech & Talent Insights
+              </p>
+              {subscribed ? (
+                <div className="flex items-center gap-2 text-xs text-emerald-400 font-medium p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 max-w-sm">
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>Thank you for subscribing!</span>
+                </div>
+              ) : (
+                <form onSubmit={handleSubscribe} className="flex gap-2 max-w-sm">
+                  <input
+                    type="email"
+                    required
+                    placeholder="Enter your work email..."
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="flex-1 px-3.5 py-2 rounded-xl bg-[#080B14] border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <button
+                    type="submit"
+                    disabled={subscribing}
+                    className="px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-colors flex items-center justify-center shrink-0"
+                  >
+                    <Send className="w-3.5 h-3.5" />
+                  </button>
+                </form>
+              )}
             </div>
           </div>
 
@@ -135,6 +194,9 @@ export const Footer = ({ onOpenLegal }) => {
             >
               Terms of Service
             </button>
+            <Link to="/admin/login" className="text-slate-600 hover:text-slate-400 transition-colors">
+              Admin Portal
+            </Link>
           </div>
         </div>
       </Container>

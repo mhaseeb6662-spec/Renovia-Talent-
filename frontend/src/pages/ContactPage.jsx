@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import { Send, CheckCircle2, Building, User, Mail, MessageSquare, Sparkles, ShieldCheck, Clock, Globe } from 'lucide-react';
+import { Send, CheckCircle2, Building, User, Mail, MessageSquare, Sparkles, ShieldCheck, Clock, Globe, AlertCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import PageHero from '../components/common/PageHero';
 import Container from '../components/common/Container';
 import Button from '../components/common/Button';
-
 import VideoBackground from '../components/common/VideoBackground';
+import { submitContactLead } from '../services/api';
 
 export const ContactPage = () => {
   const [inquiryType, setInquiryType] = useState('technology');
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -17,18 +19,38 @@ export const ContactPage = () => {
     details: '',
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSubmitting(true);
+    setError(null);
+
     try {
-      confetti({
-        particleCount: 90,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ['#2563EB', '#3B82F6', '#60A5FA', '#FFFFFF']
+      const res = await submitContactLead({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        company: formData.company.trim(),
+        service: inquiryType === 'technology' ? 'Technology Development' : inquiryType === 'talent' ? 'Talent & Staffing' : 'Business Operations',
+        message: formData.details.trim(),
       });
+
+      if (!res.success) {
+        throw new Error(res.message || 'Failed to submit inquiry.');
+      }
+
+      setSubmitted(true);
+      try {
+        confetti({
+          particleCount: 90,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#2563EB', '#3B82F6', '#60A5FA', '#FFFFFF']
+        });
+      } catch (err) {}
     } catch (err) {
-      // confetti fallback
+      console.error('Contact submission error:', err);
+      setError(err.message || 'Unable to submit your inquiry to our server. Please try again or reach out on WhatsApp.');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -82,8 +104,8 @@ export const ContactPage = () => {
                     <ShieldCheck className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-body font-semibold text-white">Confidential & Compliant</h4>
-                    <p className="text-xs text-slate-400 font-normal mt-1">Strict data privacy and NDA options for sensitive projects.</p>
+                    <h4 className="text-body font-semibold text-white">Strict Confidentiality</h4>
+                    <p className="text-xs text-slate-400 font-normal mt-1">Your business context, project ideas, and information are fully protected under NDA.</p>
                   </div>
                 </div>
 
@@ -92,8 +114,8 @@ export const ContactPage = () => {
                     <Globe className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-body font-semibold text-white">Global Service Delivery</h4>
-                    <p className="text-xs text-slate-400 font-normal mt-1">Serving clients across technology, recruitment, and digital ops.</p>
+                    <h4 className="text-body font-semibold text-white">Global Scalability</h4>
+                    <p className="text-xs text-slate-400 font-normal mt-1">Direct support across North America, Europe, Asia, and remote teams globally.</p>
                   </div>
                 </div>
               </div>
@@ -101,21 +123,21 @@ export const ContactPage = () => {
 
             {/* Right: Interactive Contact Form (7 cols) */}
             <div className="lg:col-span-7">
-              <div className="p-8 sm:p-10 rounded-3xl bg-[#080B14]/70 backdrop-blur-xl border border-slate-800/50 shadow-2xl relative z-10">
+              <div className="p-6 sm:p-10 rounded-3xl bg-[#0B101A] border border-blue-500/40 shadow-2xl shadow-blue-500/10">
                 {submitted ? (
-                  <div className="py-16 text-center space-y-6">
-                    <div className="w-20 h-20 mx-auto rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center text-emerald-400 shadow-xl shadow-emerald-500/20 animate-bounce">
-                      <CheckCircle2 className="w-10 h-10" />
+                  <div className="py-12 text-center space-y-6">
+                    <div className="w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-400 flex items-center justify-center mx-auto">
+                      <CheckCircle2 className="w-8 h-8" />
                     </div>
                     
                     <div className="space-y-2">
-                      <h3 className="text-h2 font-bold text-white">Inquiry Received</h3>
-                      <p className="text-body text-slate-300 font-normal max-w-md mx-auto">
+                      <h3 className="text-2xl font-bold text-white">Inquiry Received Successfully</h3>
+                      <p className="text-slate-400 text-sm max-w-md mx-auto">
                         Thank you for reaching out to Renovia Talent. Our team will review your requirement and contact you shortly.
                       </p>
                     </div>
 
-                    <Button variant="primary" size="md" onClick={() => setSubmitted(false)} className="mx-auto w-auto">
+                    <Button variant="primary" size="md" onClick={() => { setSubmitted(false); setFormData({ name: '', email: '', company: '', details: '' }); }} className="mx-auto w-auto">
                       Submit Another Inquiry
                     </Button>
                   </div>
@@ -143,9 +165,9 @@ export const ContactPage = () => {
 
                         <button
                           type="button"
-                          onClick={() => setInquiryType('staffing')}
+                          onClick={() => setInquiryType('talent')}
                           className={`p-3.5 rounded-2xl border text-xs font-semibold transition-all text-left flex flex-col gap-1 ${
-                            inquiryType === 'staffing'
+                            inquiryType === 'talent'
                               ? 'bg-blue-600/20 border-blue-400 text-blue-300 shadow-md'
                               : 'bg-[#05070D] border-slate-800 text-slate-400 hover:border-slate-700'
                           }`}
@@ -205,11 +227,11 @@ export const ContactPage = () => {
                     <div className="space-y-1.5">
                       <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
                         <Building className="w-3.5 h-3.5 text-blue-400" />
-                        Organization / Company Name
+                        Company / Organization
                       </label>
                       <input
                         type="text"
-                        placeholder="e.g. Apex Global Solutions"
+                        placeholder="e.g. Acme Innovations Ltd"
                         value={formData.company}
                         onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                         className="w-full px-4 py-3 rounded-xl bg-[#05070D] border border-slate-800 text-white placeholder-slate-500 text-body font-normal focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -219,34 +241,45 @@ export const ContactPage = () => {
                     <div className="space-y-1.5">
                       <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
                         <MessageSquare className="w-3.5 h-3.5 text-blue-400" />
-                        Requirement Details *
+                        Project Scope & Business Requirements *
                       </label>
                       <textarea
                         rows={4}
                         required
-                        placeholder="Describe what technology, talent, or operational support your business requires..."
+                        placeholder="Describe your technical requirements, team needs, estimated timeframe, or any specific questions..."
                         value={formData.details}
                         onChange={(e) => setFormData({ ...formData, details: e.target.value })}
                         className="w-full px-4 py-3 rounded-xl bg-[#05070D] border border-slate-800 text-white placeholder-slate-500 text-body font-normal focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                       />
                     </div>
 
-                    <div className="pt-2">
-                      <Button type="submit" variant="primary" size="lg" icon={Send} className="w-full sm:w-auto">
-                        Submit Inquiry
-                      </Button>
-                    </div>
+                    {error && (
+                      <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
+                        <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
+                        <span>{error}</span>
+                      </div>
+                    )}
 
+                    <Button
+                      type="submit"
+                      variant="primary"
+                      size="lg"
+                      disabled={submitting}
+                      icon={Send}
+                      iconPosition="right"
+                      className="w-full justify-center"
+                    >
+                      {submitting ? 'Submitting Inquiry...' : 'Submit Consultation Request'}
+                    </Button>
                   </form>
                 )}
               </div>
             </div>
 
           </div>
-        </Container>
-      </section>
+          </Container>
+        </section>
       </VideoBackground>
-
     </main>
   );
 };

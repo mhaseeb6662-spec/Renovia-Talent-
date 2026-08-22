@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { X, Sparkles, Send, CheckCircle2, Building, User, Mail, MessageSquare } from 'lucide-react';
+import { X, Sparkles, Send, CheckCircle2, Building, User, Mail, MessageSquare, AlertCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import Button from './common/Button';
+import { submitContactLead } from '../services/api';
 
 export const ContactModal = ({ isOpen, onClose }) => {
   const [inquiryType, setInquiryType] = useState('technology');
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -15,23 +18,44 @@ export const ContactModal = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSubmitting(true);
+    setError(null);
+
     try {
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ['#2563EB', '#3B82F6', '#60A5FA', '#FFFFFF']
+      const res = await submitContactLead({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        company: formData.company.trim(),
+        service: inquiryType === 'technology' ? 'Technology Development' : inquiryType === 'talent' ? 'Talent & Staffing' : 'Business Operations',
+        message: formData.details.trim(),
       });
+
+      if (!res.success) {
+        throw new Error(res.message || 'Failed to submit inquiry.');
+      }
+
+      setSubmitted(true);
+      try {
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#2563EB', '#3B82F6', '#60A5FA', '#FFFFFF']
+        });
+      } catch (err) {}
     } catch (err) {
-      // confetti fallback
+      console.error('Contact modal submission error:', err);
+      setError(err.message || 'Unable to submit your inquiry. Please check your network connection.');
+    } finally {
+      setSubmitting(false);
     }
   };
 
   const handleReset = () => {
     setSubmitted(false);
+    setError(null);
     setFormData({ name: '', email: '', company: '', details: '' });
     onClose();
   };
@@ -98,21 +122,21 @@ export const ContactModal = ({ isOpen, onClose }) => {
                         : 'bg-[#05070D] border-slate-800 text-slate-400 hover:border-slate-700'
                     }`}
                   >
-                    <span>Software & Technology</span>
-                    <span className="text-[10px] font-normal text-slate-400">Apps, Web & IT Solutions</span>
+                    <span>Software & Tech</span>
+                    <span className="text-[10px] font-normal text-slate-400">Web, Mobile & AI</span>
                   </button>
 
                   <button
                     type="button"
-                    onClick={() => setInquiryType('staffing')}
+                    onClick={() => setInquiryType('talent')}
                     className={`p-3 rounded-xl border text-xs font-semibold transition-all text-left flex flex-col gap-1 ${
-                      inquiryType === 'staffing'
+                      inquiryType === 'talent'
                         ? 'bg-blue-600/20 border-blue-400 text-blue-300 shadow-md'
                         : 'bg-[#05070D] border-slate-800 text-slate-400 hover:border-slate-700'
                     }`}
                   >
-                    <span>Recruitment & Talent</span>
-                    <span className="text-[10px] font-normal text-slate-400">Hiring & Workforce Placement</span>
+                    <span>Talent & Staffing</span>
+                    <span className="text-[10px] font-normal text-slate-400">Specialized Hiring</span>
                   </button>
 
                   <button
@@ -125,12 +149,12 @@ export const ContactModal = ({ isOpen, onClose }) => {
                     }`}
                   >
                     <span>Business Support</span>
-                    <span className="text-[10px] font-normal text-slate-400">Operations & Customer Service</span>
+                    <span className="text-[10px] font-normal text-slate-400">Remote Operations</span>
                   </button>
                 </div>
               </div>
 
-              {/* Form Input Fields */}
+              {/* Form Fields */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
@@ -140,10 +164,10 @@ export const ContactModal = ({ isOpen, onClose }) => {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Sarah Jenkins"
+                    placeholder="e.g. Alex Morgan"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-[#05070D] border border-slate-800 text-white placeholder-slate-500 text-body font-normal focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#05070D] border border-slate-800 text-white placeholder-slate-500 text-body font-normal focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
 
@@ -155,10 +179,10 @@ export const ContactModal = ({ isOpen, onClose }) => {
                   <input
                     type="email"
                     required
-                    placeholder="sarah@company.com"
+                    placeholder="alex@company.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-[#05070D] border border-slate-800 text-white placeholder-slate-500 text-body font-normal focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#05070D] border border-slate-800 text-white placeholder-slate-500 text-body font-normal focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -166,44 +190,54 @@ export const ContactModal = ({ isOpen, onClose }) => {
               <div className="space-y-1.5">
                 <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
                   <Building className="w-3.5 h-3.5 text-blue-400" />
-                  Organization / Company Name
+                  Company Name
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. Apex Global Solutions"
+                  placeholder="e.g. Global Tech Solutions"
                   value={formData.company}
                   onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-[#05070D] border border-slate-800 text-white placeholder-slate-500 text-body font-normal focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#05070D] border border-slate-800 text-white placeholder-slate-500 text-body font-normal focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
               <div className="space-y-1.5">
                 <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
                   <MessageSquare className="w-3.5 h-3.5 text-blue-400" />
-                  Requirement Details *
+                  Project Scope & Requirements *
                 </label>
                 <textarea
-                  rows={4}
+                  rows={3}
                   required
-                  placeholder="Describe what technology, talent, or operational support your business requires..."
+                  placeholder="Tell us what you are looking to build, team skills needed, or timeline..."
                   value={formData.details}
                   onChange={(e) => setFormData({ ...formData, details: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-[#05070D] border border-slate-800 text-white placeholder-slate-500 text-body font-normal focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#05070D] border border-slate-800 text-white placeholder-slate-500 text-body font-normal focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                 />
               </div>
 
-              <div className="pt-2 flex items-center justify-end gap-3">
-                <Button variant="ghost" size="md" onClick={onClose} className="w-auto">
-                  Cancel
-                </Button>
-                <Button type="submit" variant="primary" size="md" icon={Send} className="w-auto">
-                  Submit Inquiry
-                </Button>
-              </div>
+              {error && (
+                <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
+                  <span>{error}</span>
+                </div>
+              )}
 
+              <Button
+                type="submit"
+                variant="primary"
+                size="md"
+                disabled={submitting}
+                icon={Send}
+                iconPosition="right"
+                className="w-full justify-center"
+              >
+                {submitting ? 'Submitting Inquiry...' : 'Submit Request'}
+              </Button>
             </form>
           )}
         </div>
+
       </div>
     </div>
   );
