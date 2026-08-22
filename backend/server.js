@@ -11,6 +11,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 import authRoutes from './routes/authRoutes.js';
@@ -28,12 +29,26 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Ensure uploads directories exist
+const uploadDir = path.join(__dirname, 'uploads', 'resumes');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Prevent crashes on unhandled errors
+process.on('uncaughtException', (err) => {
+  console.error('⚠️ Uncaught Exception:', err.message);
+});
+process.on('unhandledRejection', (reason) => {
+  console.error('⚠️ Unhandled Rejection:', reason);
+});
+
 // Middleware
 app.use(cors({
-  origin: '*', // Allow requests from frontend
+  origin: '*', // Allow all origins for API
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
@@ -76,6 +91,7 @@ const connectDB = async () => {
       console.error('❌ MongoDB Direct Connection Error:', lastDbError);
       console.log('ℹ️ Retrying MongoDB connection in 6 seconds...');
       setTimeout(connectDB, 6000);
+    }
   }
 };
 
@@ -93,11 +109,11 @@ app.get('/', (req, res) => {
 
 // Diagnostic DB Health Check Route
 app.get('/api/health-db', (req, res) => {
-  const rawUri = process.env.MONGO_URI || process.env.MONGODB_URI || '';
+  const rawUri = process.env.MONGO_URI || process.env.MONGODB_URI || DEFAULT_MONGO_URI;
   res.json({
     connected: mongoose.connection.readyState === 1,
     readyState: mongoose.connection.readyState,
-    hasMongoUriEnv: !!rawUri,
+    hasMongoUriEnv: !!(process.env.MONGO_URI || process.env.MONGODB_URI),
     mongoUriPrefix: rawUri ? rawUri.substring(0, 16) + '...' : 'NONE',
     lastError: lastDbError,
   });
@@ -127,7 +143,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start Server
-app.listen(PORT, () => {
-  console.log(`🚀 Renovia Talent API Server running on http://localhost:${PORT}`);
+// Start Server on 0.0.0.0 for Cloud Containers (Railway / Docker)
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Renovia Talent API Server running on port ${PORT}`);
 });
