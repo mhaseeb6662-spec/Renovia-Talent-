@@ -43,19 +43,39 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static uploads (Resumes and Images)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+let lastDbError = null;
+
+const DEFAULT_MONGO_URI = 'mongodb+srv://mhaseeb6662_db_user:tg1hsSl9h6IDjDwI@cluster0.xzb3kqq.mongodb.net/renovia_talent?retryWrites=true&w=majority';
+const DIRECT_MONGO_URI = 'mongodb://mhaseeb6662_db_user:tg1hsSl9h6IDjDwI@ac-hicmh5y-shard-00-00.xzb3kqq.mongodb.net:27017,ac-hicmh5y-shard-00-01.xzb3kqq.mongodb.net:27017,ac-hicmh5y-shard-00-02.xzb3kqq.mongodb.net:27017/renovia_talent?ssl=true&replicaSet=atlas-3d2u7s-shard-0&authSource=admin&retryWrites=true&w=majority';
+
 // Database Connection
 const connectDB = async () => {
+  const uri = process.env.MONGO_URI || process.env.MONGODB_URI || DEFAULT_MONGO_URI;
+
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI, {
-      serverSelectionTimeoutMS: 20000,
+    const conn = await mongoose.connect(uri, {
+      serverSelectionTimeoutMS: 12000,
     });
+    lastDbError = null;
     console.log(`✅ MongoDB Connected Successfully: ${conn.connection.host}`);
     // Auto-seed default admin & data
     await seedDatabase();
   } catch (err) {
-    console.warn('⚠️ MongoDB Initial Connection Warning:', err.message);
-    console.log('ℹ️ Retrying MongoDB connection in 5 seconds...');
-    setTimeout(connectDB, 5000);
+    console.warn('⚠️ SRV MongoDB Connection Attempt Failed:', err.message);
+    // Fallback to direct replica set hosts
+    try {
+      console.log('ℹ️ Attempting connection with direct replica set hosts...');
+      const directConn = await mongoose.connect(DIRECT_MONGO_URI, {
+        serverSelectionTimeoutMS: 12000,
+      });
+      lastDbError = null;
+      console.log(`✅ MongoDB Connected via Direct Hosts: ${directConn.connection.host}`);
+      await seedDatabase();
+    } catch (directErr) {
+      lastDbError = `${directErr.name}: ${directErr.message}`;
+      console.error('❌ MongoDB Direct Connection Error:', lastDbError);
+      console.log('ℹ️ Retrying MongoDB connection in 6 seconds...');
+      setTimeout(connectDB, 6000);
   }
 };
 
@@ -66,7 +86,20 @@ app.get('/', (req, res) => {
   res.json({
     status: 'online',
     message: 'Renovia Talent Full-Stack & AI API Server is running.',
+    dbConnected: mongoose.connection.readyState === 1,
     version: '1.0.0',
+  });
+});
+
+// Diagnostic DB Health Check Route
+app.get('/api/health-db', (req, res) => {
+  const rawUri = process.env.MONGO_URI || process.env.MONGODB_URI || '';
+  res.json({
+    connected: mongoose.connection.readyState === 1,
+    readyState: mongoose.connection.readyState,
+    hasMongoUriEnv: !!rawUri,
+    mongoUriPrefix: rawUri ? rawUri.substring(0, 16) + '...' : 'NONE',
+    lastError: lastDbError,
   });
 });
 
