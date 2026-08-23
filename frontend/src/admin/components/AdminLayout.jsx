@@ -14,6 +14,7 @@ import {
   FolderPlus,
 } from 'lucide-react';
 import { useAdminAuth } from '../context/AdminAuthContext';
+import { AdminErrorBoundary } from './AdminErrorBoundary';
 
 export const AdminLayout = () => {
   const { user, logout } = useAdminAuth();
@@ -140,7 +141,9 @@ export const AdminLayout = () => {
 
       {/* Main Content Area */}
       <main className="flex-1 min-h-screen p-4 sm:p-8 lg:p-10 overflow-y-auto max-w-7xl mx-auto w-full">
-        <Outlet />
+        <AdminErrorBoundary>
+          <Outlet />
+        </AdminErrorBoundary>
       </main>
 
     </div>

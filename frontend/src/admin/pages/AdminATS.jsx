@@ -28,6 +28,8 @@ import Button from '../../components/common/Button';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
+const stages = ['New', 'Screening', 'Shortlisted', 'Interview', 'Offer', 'Hired', 'Rejected'];
+
 export const AdminATS = () => {
   const { token } = useAdminAuth();
   const [applications, setApplications] = useState([]);
@@ -104,7 +106,7 @@ export const AdminATS = () => {
       });
       if (res.ok) {
         const data = await res.json();
-        setApplications(prev => prev.map(a => a._id === appId ? { ...a, status: newStatus } : a));
+        setApplications(prev => (Array.isArray(prev) ? prev.map(a => a._id === appId ? { ...a, status: newStatus } : a) : []));
         if (selectedApp && selectedApp._id === appId) {
           setSelectedApp(prev => ({ ...prev, status: newStatus }));
         }
@@ -261,7 +263,16 @@ export const AdminATS = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60">
-              {applications.length > 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan="6" className="p-12 text-center text-slate-500 text-xs">
+                    <div className="flex flex-col items-center justify-center gap-2">
+                      <div className="w-5 h-5 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                      <p>Loading candidates...</p>
+                    </div>
+                  </td>
+                </tr>
+              ) : Array.isArray(applications) && applications.length > 0 ? (
                 applications.map((app) => (
                   <tr 
                     key={app._id}
@@ -269,25 +280,25 @@ export const AdminATS = () => {
                     onClick={() => setSelectedApp(app)}
                   >
                     <td className="p-4">
-                      <div className="font-bold text-white text-sm">{app.fullName}</div>
-                      <div className="text-slate-400 text-[11px]">{app.email}</div>
+                      <div className="font-bold text-white text-sm">{app?.fullName || 'Unknown'}</div>
+                      <div className="text-slate-400 text-[11px]">{app?.email || 'No email'}</div>
                     </td>
                     <td className="p-4">
-                      <span className="font-medium text-slate-200">{app.jobTitle}</span>
-                      <div className="text-[10px] text-slate-500">{app.location || 'Remote'}</div>
+                      <span className="font-medium text-slate-200">{app?.jobTitle || 'Unknown Position'}</span>
+                      <div className="text-[10px] text-slate-500">{app?.location || 'Remote'}</div>
                     </td>
                     <td className="p-4">
-                      <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border font-bold text-xs ${getScoreColor(app.aiMatchScore)}`}>
+                      <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border font-bold text-xs ${getScoreColor(app?.aiMatchScore || 0)}`}>
                         <Sparkles className="w-3 h-3" />
-                        {app.aiMatchScore}%
+                        {app?.aiMatchScore || 0}%
                       </span>
                     </td>
                     <td className="p-4 text-slate-300">
-                      {app.yearsExperience || 'Not specified'}
+                      {app?.yearsExperience || 'Not specified'}
                     </td>
                     <td className="p-4" onClick={(e) => e.stopPropagation()}>
                       <select
-                        value={app.status}
+                        value={app?.status || 'New'}
                         disabled={updating}
                         onChange={(e) => handleUpdateStatus(app._id, e.target.value)}
                         className="px-2.5 py-1 rounded-lg bg-[#05070D] border border-slate-800 text-xs font-semibold text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -310,7 +321,7 @@ export const AdminATS = () => {
               ) : (
                 <tr>
                   <td colSpan="6" className="p-12 text-center text-slate-500 text-xs">
-                    No candidates found matching the active filter criteria.
+                    No candidate applications found.
                   </td>
                 </tr>
               )}
@@ -330,12 +341,12 @@ export const AdminATS = () => {
             <div className="flex items-start justify-between pb-4 border-b border-slate-800 shrink-0">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <h3 className="text-xl font-bold text-white">{selectedApp.fullName}</h3>
-                  <span className={`px-2.5 py-0.5 rounded-md border font-bold text-xs ${getScoreColor(selectedApp.aiMatchScore)}`}>
-                    {selectedApp.aiMatchScore}% AI Match
+                  <h3 className="text-xl font-bold text-white">{selectedApp?.fullName || 'Unknown'}</h3>
+                  <span className={`px-2.5 py-0.5 rounded-md border font-bold text-xs ${getScoreColor(selectedApp?.aiMatchScore || 0)}`}>
+                    {selectedApp?.aiMatchScore || 0}% AI Match
                   </span>
                 </div>
-                <p className="text-xs text-blue-400 font-medium">Applied for: {selectedApp.jobTitle}</p>
+                <p className="text-xs text-blue-400 font-medium">Applied for: {selectedApp?.jobTitle || 'Unknown Position'}</p>
               </div>
 
               <button
@@ -360,19 +371,19 @@ export const AdminATS = () => {
                 </div>
 
                 <p className="text-slate-300 leading-relaxed text-xs">
-                  {selectedApp.aiSummary || 'Candidate evaluated successfully with strong skill overlap.'}
+                  {selectedApp?.aiSummary || 'Candidate evaluated successfully with strong skill overlap.'}
                 </p>
 
                 {/* Score Pills */}
-                {selectedApp.aiScoreBreakdown && (
+                {selectedApp?.aiScoreBreakdown && (
                   <div className="grid grid-cols-3 gap-2 pt-2">
                     <div className="p-2.5 rounded-xl bg-[#05070D]/80 border border-slate-800 text-center">
                       <span className="text-[10px] text-slate-400 block">Technical Skills</span>
-                      <span className="text-sm font-bold text-emerald-400">{selectedApp.aiScoreBreakdown.technicalSkills}%</span>
+                      <span className="text-sm font-bold text-emerald-400">{selectedApp.aiScoreBreakdown.technicalSkills || 0}%</span>
                     </div>
                     <div className="p-2.5 rounded-xl bg-[#05070D]/80 border border-slate-800 text-center">
                       <span className="text-[10px] text-slate-400 block">Experience Depth</span>
-                      <span className="text-sm font-bold text-blue-400">{selectedApp.aiScoreBreakdown.experience}%</span>
+                      <span className="text-sm font-bold text-blue-400">{selectedApp.aiScoreBreakdown.experience || 0}%</span>
                     </div>
                     <div className="p-2.5 rounded-xl bg-[#05070D]/80 border border-slate-800 text-center">
                       <span className="text-[10px] text-slate-400 block">Role Relevance</span>
@@ -382,7 +393,7 @@ export const AdminATS = () => {
                 )}
 
                 {/* Extracted Skills */}
-                {selectedApp.aiParsedSkills && selectedApp.aiParsedSkills.length > 0 && (
+                {Array.isArray(selectedApp?.aiParsedSkills) && selectedApp.aiParsedSkills.length > 0 && (
                   <div className="pt-2">
                     <p className="text-[11px] font-semibold text-slate-400 mb-1.5">Parsed Skills from Resume:</p>
                     <div className="flex flex-wrap gap-1.5">
@@ -400,24 +411,24 @@ export const AdminATS = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="p-3.5 rounded-xl bg-[#05070D] border border-slate-800 space-y-2">
                   <p className="text-[10px] font-bold text-slate-400 uppercase">Contact Information</p>
-                  <p className="text-white flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-blue-400" /> {selectedApp.email}</p>
-                  {selectedApp.phone && <p className="text-white flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-blue-400" /> {selectedApp.phone}</p>}
-                  {selectedApp.location && <p className="text-white flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-blue-400" /> {selectedApp.location}</p>}
+                  <p className="text-white flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-blue-400" /> {selectedApp?.email || 'N/A'}</p>
+                  {selectedApp?.phone && <p className="text-white flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-blue-400" /> {selectedApp.phone}</p>}
+                  {selectedApp?.location && <p className="text-white flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-blue-400" /> {selectedApp.location}</p>}
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-[#05070D] border border-slate-800 space-y-2">
                   <p className="text-[10px] font-bold text-slate-400 uppercase">Profile & Links</p>
-                  {selectedApp.linkedin && (
+                  {selectedApp?.linkedin && (
                     <a href={selectedApp.linkedin} target="_blank" rel="noreferrer" className="text-blue-400 hover:underline flex items-center gap-1.5">
                       <Linkedin className="w-3.5 h-3.5" /> LinkedIn Profile
                     </a>
                   )}
-                  {selectedApp.portfolio && (
+                  {selectedApp?.portfolio && (
                     <a href={selectedApp.portfolio} target="_blank" rel="noreferrer" className="text-blue-400 hover:underline flex items-center gap-1.5">
                       <Globe className="w-3.5 h-3.5" /> Portfolio / GitHub
                     </a>
                   )}
-                  <p className="text-slate-300">Experience: <strong className="text-white">{selectedApp.yearsExperience || 'N/A'}</strong></p>
+                  <p className="text-slate-300">Experience: <strong className="text-white">{selectedApp?.yearsExperience || 'N/A'}</strong></p>
                 </div>
               </div>
 
@@ -428,13 +439,13 @@ export const AdminATS = () => {
                     <FileText className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="font-semibold text-white">{selectedApp.resumeOriginalName || 'Resume Document'}</p>
+                    <p className="font-semibold text-white">{selectedApp?.resumeOriginalName || 'Resume Document'}</p>
                     <p className="text-[10px] text-slate-500">Stored in secure platform storage</p>
                   </div>
                 </div>
 
                 <a
-                  href={`http://localhost:5000${selectedApp.resumeUrl}`}
+                  href={selectedApp?.resumeUrl ? (selectedApp.resumeUrl.startsWith('http') ? selectedApp.resumeUrl : `${API_BASE_URL.replace(/\/api$/, '')}${selectedApp.resumeUrl}`) : '#'}
                   target="_blank"
                   rel="noreferrer"
                   download
@@ -446,7 +457,7 @@ export const AdminATS = () => {
               </div>
 
               {/* Cover Letter */}
-              {selectedApp.coverLetter && (
+              {selectedApp?.coverLetter && (
                 <div className="p-4 rounded-xl bg-[#05070D] border border-slate-800 space-y-1.5">
                   <p className="text-[10px] font-bold text-slate-400 uppercase">Cover Letter / Note</p>
                   <p className="text-slate-300 leading-relaxed">{selectedApp.coverLetter}</p>
@@ -456,18 +467,18 @@ export const AdminATS = () => {
               {/* Recruiter Notes Thread */}
               <div className="space-y-3 pt-2">
                 <h4 className="font-bold text-white uppercase tracking-wider text-xs">
-                  Recruiter Internal Notes ({selectedApp.internalNotes?.length || 0})
+                  Recruiter Internal Notes ({Array.isArray(selectedApp?.internalNotes) ? selectedApp.internalNotes.length : 0})
                 </h4>
 
                 <div className="space-y-2">
-                  {selectedApp.internalNotes && selectedApp.internalNotes.length > 0 ? (
+                  {Array.isArray(selectedApp?.internalNotes) && selectedApp.internalNotes.length > 0 ? (
                     selectedApp.internalNotes.map((n, i) => (
                       <div key={i} className="p-3 rounded-xl bg-[#05070D] border border-slate-800 text-xs">
                         <div className="flex items-center justify-between text-slate-400 text-[10px] mb-1">
-                          <span className="font-bold text-blue-400">{n.author || 'Admin'}</span>
-                          <span>{new Date(n.createdAt).toLocaleDateString()}</span>
+                          <span className="font-bold text-blue-400">{n?.author || 'Admin'}</span>
+                          <span>{n?.createdAt ? new Date(n.createdAt).toLocaleDateString() : ''}</span>
                         </div>
-                        <p className="text-slate-200">{n.note}</p>
+                        <p className="text-slate-200">{n?.note}</p>
                       </div>
                     ))
                   ) : (
@@ -500,7 +511,7 @@ export const AdminATS = () => {
               <div className="flex items-center gap-2">
                 <span className="text-xs text-slate-400">Change Candidate Stage:</span>
                 <select
-                  value={selectedApp.status}
+                  value={selectedApp?.status || 'New'}
                   onChange={(e) => handleUpdateStatus(selectedApp._id, e.target.value)}
                   className="px-3 py-1.5 rounded-xl bg-[#05070D] border border-slate-800 text-xs font-bold text-white focus:ring-2 focus:ring-blue-500"
                 >
