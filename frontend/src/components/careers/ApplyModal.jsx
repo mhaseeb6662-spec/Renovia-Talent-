@@ -49,6 +49,15 @@ export const ApplyModal = ({ job, isOpen, onClose }) => {
       return;
     }
 
+    if (formData.linkedin) {
+      try {
+        new URL(formData.linkedin);
+      } catch (_) {
+        setStatusMessage({ type: 'error', text: 'Please enter a valid LinkedIn URL.' });
+        return;
+      }
+    }
+
     setSubmitting(true);
     setStatusMessage({ type: 'info', text: 'Uploading resume and initiating AI evaluation...' });
 
@@ -236,7 +245,7 @@ export const ApplyModal = ({ job, isOpen, onClose }) => {
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
                     <Linkedin className="w-3.5 h-3.5 text-blue-400" />
-                    LinkedIn URL
+                    LinkedIn URL (Optional)
                   </label>
                   <input
                     type="url"
