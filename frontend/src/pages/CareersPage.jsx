@@ -42,6 +42,19 @@ export const CareersPage = () => {
     fetchCareers();
   }, [selectedDepartment, searchTerm]);
 
+  useEffect(() => {
+    document.title = 'Careers at Renovia Talent | Join Our Team';
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'Explore career opportunities at Renovia Talent and apply online for available positions.');
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'description';
+      meta.content = 'Explore career opportunities at Renovia Talent and apply online for available positions.';
+      document.head.appendChild(meta);
+    }
+  }, []);
+
   const handleOpenApply = (job) => {
     setSelectedJob(job);
     setIsApplyModalOpen(true);
@@ -259,7 +272,18 @@ export const CareersPage = () => {
               <p className="text-slate-300 mb-8">
                 We're always looking for exceptionally talented people. Send us your resume, and our AI recruitment engine will match your profile when relevant roles open.
               </p>
-              <Button onClick={() => navigate('/contact')} variant="secondary" icon={Sparkles}>
+              <Button 
+                onClick={() => handleOpenApply({ 
+                  _id: 'general', 
+                  id: 'general', 
+                  title: 'General Application', 
+                  department: 'All Departments', 
+                  type: 'Any', 
+                  location: 'Anywhere' 
+                })} 
+                variant="secondary" 
+                icon={Sparkles}
+              >
                 Send Your Resume
               </Button>
             </div>

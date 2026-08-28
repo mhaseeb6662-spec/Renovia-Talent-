@@ -5,7 +5,7 @@ const applicationSchema = new mongoose.Schema(
     job: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Job',
-      required: true,
+      required: false,
     },
     jobTitle: {
       type: String,
@@ -53,6 +53,22 @@ const applicationSchema = new mongoose.Schema(
     noticePeriod: {
       type: String,
       default: 'Immediate / 30 Days',
+    },
+    employmentPreference: {
+      type: String,
+      default: 'Full-time',
+    },
+    currentCompany: {
+      type: String,
+      default: '',
+    },
+    source: {
+      type: String,
+      default: '',
+    },
+    consentGiven: {
+      type: Boolean,
+      default: false,
     },
     coverLetter: {
       type: String,

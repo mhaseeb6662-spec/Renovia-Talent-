@@ -25,6 +25,10 @@ router.post('/apply', uploadResume.single('resume'), async (req, res) => {
       currentRole,
       expectedSalary,
       noticePeriod,
+      employmentPreference,
+      currentCompany,
+      source,
+      consentGiven,
       coverLetter,
       screeningAnswers,
     } = req.body;
@@ -33,9 +37,20 @@ router.post('/apply', uploadResume.single('resume'), async (req, res) => {
       return res.status(400).json({ success: false, message: 'Please upload your resume (PDF/DOC/DOCX).' });
     }
 
-    const job = await Job.findById(jobId);
-    if (!job) {
-      return res.status(404).json({ success: false, message: 'The specified job vacancy was not found or is closed.' });
+    let job;
+    if (jobId === 'general') {
+      job = {
+        _id: null,
+        title: 'General Application',
+        department: 'All Departments',
+        location: 'Anywhere',
+        type: 'Any'
+      };
+    } else {
+      job = await Job.findById(jobId);
+      if (!job) {
+        return res.status(404).json({ success: false, message: 'The specified job vacancy was not found or is closed.' });
+      }
     }
 
     // Relative URL for serving resume file
@@ -68,7 +83,7 @@ router.post('/apply', uploadResume.single('resume'), async (req, res) => {
 
     // 3. Create Application Record
     const application = await Application.create({
-      job: job._id,
+      ...(job._id ? { job: job._id } : {}),
       jobTitle: job.title,
       fullName,
       email,
@@ -80,6 +95,10 @@ router.post('/apply', uploadResume.single('resume'), async (req, res) => {
       currentRole: currentRole || '',
       expectedSalary: expectedSalary || '',
       noticePeriod: noticePeriod || 'Immediate',
+      employmentPreference: employmentPreference || 'Full-time',
+      currentCompany: currentCompany || '',
+      source: source || '',
+      consentGiven: consentGiven === 'true' || consentGiven === true,
       coverLetter: coverLetter || '',
       resumeUrl,
       resumeOriginalName: req.file.originalname,
@@ -94,8 +113,10 @@ router.post('/apply', uploadResume.single('resume'), async (req, res) => {
     });
 
     // Increment applicants counter on job
-    job.applicantsCount = (job.applicantsCount || 0) + 1;
-    await job.save();
+    if (job._id && job.save) {
+      job.applicantsCount = (job.applicantsCount || 0) + 1;
+      await job.save();
+    }
 
     // 4. Send Confirmation Email (Async)
     sendApplicationConfirmationEmail({
