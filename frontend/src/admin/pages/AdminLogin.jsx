@@ -5,8 +5,8 @@ import { useAdminAuth } from '../context/AdminAuthContext';
 import Button from '../../components/common/Button';
 
 export const AdminLogin = () => {
-  const [email, setEmail] = useState('admin@renoviatalent.com');
-  const [password, setPassword] = useState('Admin@123456');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { login, loading, isAuthenticated } = useAdminAuth();
   const navigate = useNavigate();
@@ -107,15 +107,7 @@ export const AdminLogin = () => {
           </div>
         </form>
 
-        {/* Default Credential Helper Note */}
-        <div className="p-3.5 rounded-2xl bg-[#101621] border border-slate-800 text-[11px] text-slate-400 space-y-1">
-          <div className="flex items-center gap-1 text-blue-400 font-semibold">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Default Super Admin Credentials:</span>
-          </div>
-          <p>Email: <code className="text-slate-200">admin@renoviatalent.com</code></p>
-          <p>Password: <code className="text-slate-200">Admin@123456</code></p>
-        </div>
+
 
         <div className="text-center">
           <Link to="/" className="text-xs text-slate-500 hover:text-blue-400 transition-colors">
