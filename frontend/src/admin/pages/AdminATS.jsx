@@ -28,7 +28,12 @@ import Button from '../../components/common/Button';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
-const stages = ['New', 'Screening', 'Shortlisted', 'Interview', 'Offer', 'Hired', 'Rejected'];
+const stages = [
+  'New', 'Screening', 'Shortlisted', 'Interview', 'Offer', 'Hired', 'Rejected',
+  // HR Call Tracker Options
+  'Connected', 'No Answer', 'Busy', 'Call Back', 'Interested', 'Not Interested', 
+  'Wrong Number', 'Number Not Reachable', 'Interview Scheduled', 'Selected', 'Joined'
+];
 
 export const AdminATS = () => {
   const { token } = useAdminAuth();
@@ -414,6 +419,12 @@ export const AdminATS = () => {
                   <p className="text-white flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-blue-400" /> {selectedApp?.email || 'N/A'}</p>
                   {selectedApp?.phone && <p className="text-white flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-blue-400" /> {selectedApp.phone}</p>}
                   {selectedApp?.location && <p className="text-white flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-blue-400" /> {selectedApp.location}</p>}
+                  
+                  <div className="pt-2 mt-2 border-t border-slate-800/80 space-y-1">
+                    <p className="text-slate-300">Role Pref: <strong className="text-white">{selectedApp?.employmentPreference || 'N/A'}</strong></p>
+                    <p className="text-slate-300">Notice: <strong className="text-white">{selectedApp?.noticePeriod || 'N/A'}</strong></p>
+                    <p className="text-slate-300">Expected: <strong className="text-emerald-400">{selectedApp?.expectedSalary || 'N/A'}</strong></p>
+                  </div>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-[#05070D] border border-slate-800 space-y-2">
@@ -428,7 +439,12 @@ export const AdminATS = () => {
                       <Globe className="w-3.5 h-3.5" /> Portfolio / GitHub
                     </a>
                   )}
-                  <p className="text-slate-300">Experience: <strong className="text-white">{selectedApp?.yearsExperience || 'N/A'}</strong></p>
+                  
+                  <div className="pt-2 mt-2 border-t border-slate-800/80 space-y-1">
+                    <p className="text-slate-300">Experience: <strong className="text-white">{selectedApp?.yearsExperience || 'N/A'}</strong></p>
+                    <p className="text-slate-300">Current Co: <strong className="text-white">{selectedApp?.currentCompany || 'N/A'}</strong></p>
+                    <p className="text-slate-300">Source: <strong className="text-white">{selectedApp?.source || 'N/A'}</strong></p>
+                  </div>
                 </div>
               </div>
 

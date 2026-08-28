@@ -84,7 +84,11 @@ const applicationSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['New', 'Screening', 'Shortlisted', 'Interview', 'Offer', 'Hired', 'Rejected'],
+      enum: [
+        'New', 'Screening', 'Shortlisted', 'Interview', 'Offer', 'Hired', 'Rejected',
+        'Connected', 'No Answer', 'Busy', 'Call Back', 'Interested', 'Not Interested', 
+        'Wrong Number', 'Number Not Reachable', 'Interview Scheduled', 'Selected', 'Joined'
+      ],
       default: 'New',
     },
     aiMatchScore: {
