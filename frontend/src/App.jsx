@@ -155,11 +155,10 @@ export const AppContent = () => {
 };
 
 export const App = () => {
-  throw new Error("Frontend intentionally disabled.");
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#f8f9fa', color: '#333', fontFamily: 'sans-serif' }}>
+      <h1>Hosting Plan Expired</h1>
+    </div>
   );
 };
 
