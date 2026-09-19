@@ -155,6 +155,7 @@ export const AppContent = () => {
 };
 
 export const App = () => {
+  throw new Error("Frontend intentionally disabled.");
   return (
     <Router>
       <AppContent />
